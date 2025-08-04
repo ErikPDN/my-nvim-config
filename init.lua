@@ -24,6 +24,11 @@ vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
 vim.opt.completeopt = 'menuone,noselect'
 vim.opt.clipboard = "unnamedplus"
+vim.opt.laststatus = 3
+vim.opt.cmdheight = 0
+vim.o.showmode = false
+vim.o.showcmd = false
+vim.o.ruler = false
 
 -- Carrega o lazy.nvim e os plugins
 require("config.lazy")

@@ -6,7 +6,7 @@ return {
     "nvim-tree/nvim-web-devicons", -- optional, but recommended
     "MunifTanjim/nui.nvim",
   },
-  lazy = false, -- neo-tree will lazily load itself
+  lazy = false,
   config = function()
     require("neo-tree").setup({
       close_if_last_window = true, -- Close Neo-tree if it is the last window left in the tab
@@ -25,7 +25,8 @@ return {
         icon = {
         },
         modified = {
-          symbol = "[+]", highlight = "NeoTreeModified", }, name = {
+          symbol = "[+]", highlight = "NeoTreeModified", },
+        name = {
           trailing_slash = false,
           use_git_status_colors = true,
           highlight = "NeoTreeFileName",
@@ -34,8 +35,8 @@ return {
           symbols = {
             added     = "", -- or "✚", but this is redundant info if you use git_status_colors on the name
             modified  = "", -- or "", but this is redundant info if you use git_status_colors on the name
-            deleted   = "✖",-- this can only be used in the git_status source
-            renamed   = "󰁕",-- this can only be used in the git_status source
+            deleted   = "✖", -- this can only be used in the git_status source
+            renamed   = "󰁕", -- this can only be used in the git_status source
             untracked = "",
             ignored   = "",
             unstaged  = "󰄱",
@@ -52,9 +53,9 @@ return {
           nowait = true,
         },
         mappings = {
-          ["<space>"] = { 
-            "toggle_node", 
-            nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use 
+          ["<space>"] = {
+            "toggle_node",
+            nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
           },
           ["<2-LeftMouse>"] = "open",
           ["<cr>"] = "open",
@@ -74,7 +75,7 @@ return {
           -- ['C'] = 'close_all_subnodes',
           ["z"] = "close_all_nodes",
           --["Z"] = "expand_all_nodes",
-          ["a"] = { 
+          ["a"] = {
             "add",
             config = {
               show_path = "none" -- "none", "relative", "absolute"
@@ -128,18 +129,18 @@ return {
           },
         },
         follow_current_file = {
-          enabled = false, -- This will find and focus the file in the active buffer every time
+          enabled = false,                      -- This will find and focus the file in the active buffer every time
           --               -- the current file is changed while the tree is open.
-          leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+          leave_dirs_open = false,              -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
-        group_empty_dirs = false, -- when true, empty folders will be grouped together
+        group_empty_dirs = false,               -- when true, empty folders will be grouped together
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
-                                                -- in whatever position is specified in window.position
-                              -- "open_current",  -- netrw disabled, opening a directory opens within the
-                                                -- window like netrw would, regardless of window.position
-                              -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
+        -- in whatever position is specified in window.position
+        -- "open_current",  -- netrw disabled, opening a directory opens within the
+        -- window like netrw would, regardless of window.position
+        -- "disabled",    -- netrw left alone, neo-tree does not handle opening dirs
         use_libuv_file_watcher = false, -- This will use the OS level file watchers to detect changes
-                                        -- instead of relying on nvim autocmd events.
+        -- instead of relying on nvim autocmd events.
         window = {
           mappings = {
             ["<bs>"] = "navigate_up",
@@ -153,7 +154,7 @@ return {
             ["<c-x>"] = "clear_filter",
             ["[g"] = "prev_git_modified",
             ["]g"] = "next_git_modified",
-            ["o"] = { "show_help", nowait=false, config = { title = "Order by", prefix_key = "o" }},
+            ["o"] = { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
             ["oc"] = { "order_by_created", nowait = false },
             ["od"] = { "order_by_diagnostics", nowait = false },
             ["og"] = { "order_by_git_status", nowait = false },
@@ -172,18 +173,18 @@ return {
       },
       buffers = {
         follow_current_file = {
-          enabled = true, -- This will find and focus the file in the active buffer every time
+          enabled = true,          -- This will find and focus the file in the active buffer every time
           --              -- the current file is changed while the tree is open.
           leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
-        group_empty_dirs = true, -- when true, empty folders will be grouped together
+        group_empty_dirs = true,   -- when true, empty folders will be grouped together
         show_unloaded = true,
         window = {
           mappings = {
             ["bd"] = "buffer_delete",
             ["<bs>"] = "navigate_up",
             ["."] = "set_root",
-            ["o"] = { "show_help", nowait=false, config = { title = "Order by", prefix_key = "o" }},
+            ["o"] = { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
             ["oc"] = { "order_by_created", nowait = false },
             ["od"] = { "order_by_diagnostics", nowait = false },
             ["om"] = { "order_by_modified", nowait = false },
@@ -204,7 +205,7 @@ return {
             ["gc"] = "git_commit",
             ["gp"] = "git_push",
             ["gg"] = "git_commit_and_push",
-            ["o"] = { "show_help", nowait=false, config = { title = "Order by", prefix_key = "o" }},
+            ["o"]  = { "show_help", nowait = false, config = { title = "Order by", prefix_key = "o" } },
             ["oc"] = { "order_by_created", nowait = false },
             ["od"] = { "order_by_diagnostics", nowait = false },
             ["om"] = { "order_by_modified", nowait = false },

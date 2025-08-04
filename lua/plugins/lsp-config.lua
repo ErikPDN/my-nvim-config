@@ -56,7 +56,7 @@ return {
                     version = 'LuaJIT',
                   },
                   diagnostics = {
-                    globals = { 'vim' }, -- Reconhece 'vim' como global
+                    globals = { 'vim' },
                   },
                   workspace = {
                     library = vim.api.nvim_get_runtime_file("", true),
@@ -74,7 +74,6 @@ return {
           -- Handler específico para jdtls (Java)
           ["jdtls"] = function()
             -- Para Java, é melhor usar nvim-jdtls plugin separadamente
-            -- Aqui apenas configuramos básico
             vim.lsp.config.jdtls = {
               capabilities = require('mason-lspconfig').get_capabilities(),
               root_markers = { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' },

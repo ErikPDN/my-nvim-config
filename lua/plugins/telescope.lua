@@ -24,12 +24,11 @@ return {
           prompt_prefix = " ",
           selection_caret = " ",
           path_display = { "truncate" },
-
           -- Mapeamentos dentro do telescope
           mappings = {
             i = {
               ["<C-k>"] = actions.move_selection_previous, -- mover para cima
-              ["<C-j>"] = actions.move_selection_next,   -- mover para baixo
+              ["<C-j>"] = actions.move_selection_next,     -- mover para baixo
               ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
               ["<C-x>"] = actions.select_horizontal,
               ["<C-v>"] = actions.select_vertical,
