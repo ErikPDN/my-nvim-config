@@ -12,17 +12,17 @@ vim.cmd("set shiftwidth=2")
 
 -- Configurações adicionais recomendadas
 vim.opt.number = true
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = false
 vim.opt.wrap = false
 vim.opt.breakindent = true
 vim.opt.undofile = true
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
-vim.opt.completeopt = 'menuone,noselect'
+vim.opt.completeopt = "menuone,noselect"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
