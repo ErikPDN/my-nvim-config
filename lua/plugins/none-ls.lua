@@ -19,7 +19,7 @@ return {
 				},
 			})
 
-			vim.keymap.set("s", "<leader>gf", vim.lsp.buf.format, {})
+			vim.keymap.set("n", "<leader>gf", vim.lsp.buf.format, {})
 		end,
 	},
 }
