@@ -58,7 +58,6 @@ return {
 							["L"] = actions.move_to_bottom,
 							["<Down>"] = actions.move_selection_next,
 							["<Up>"] = actions.move_selection_previous,
-							["gg"] = actions.move_to_top,
 							["G"] = actions.move_to_bottom,
 							["<C-u>"] = actions.preview_scrolling_up,
 							["<C-d>"] = actions.preview_scrolling_down,

@@ -1,161 +1,123 @@
 return {
-	-- BLOCO 1: MASON
-	-- Responsável apenas por existir e gerenciar os pacotes.
-	{
-		"mason-org/mason.nvim",
-		config = function()
-			require("mason").setup({
-				ui = {
-					icons = {
-						package_installed = "✓",
-						package_pending = "➜",
-						package_uninstalled = "✗",
-					},
-				},
-			})
-		end,
-	},
+    -- BLOCO 1: MASON
+    -- Instala e gerencia os LSPs, Linters e Formatadores.
+    {
+        "mason-org/mason.nvim",
+        config = function()
+            require("mason").setup({
+                ui = {
+                    icons = {
+                        package_installed = "✓",
+                        package_pending = "➜",
+                        package_uninstalled = "✗",
+                    },
+                },
+            })
+        end,
+    },
 
-	-- BLOCO 2: MASON-LSPCONFIG
-	-- Responsável por garantir que os LSPs estejam instalados via Mason.
-	{
-		"mason-org/mason-lspconfig.nvim",
-		dependencies = { "mason-org/mason.nvim" },
-		config = function()
-			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"lua_ls",
-					"pyright",
-					"ts_ls",
-					"html",
-					"cssls",
-					"jsonls",
-					"yamlls",
-					"bashls",
-					"marksman",
-					"jdtls",
-				},
-				-- Configuração automática usando vim.lsp.config (API moderna)
-				handlers = {
-					-- Handler padrão para todos os servidores
-					function(server_name)
-						vim.lsp.config[server_name] = {
-							-- Configurações básicas comuns
-							capabilities = require("mason-lspconfig").get_capabilities(),
-						}
-						vim.lsp.enable(server_name)
-					end,
+    -- BLOCO 2: MASON-LSPCONFIG
+    -- Faz a ponte entre o Mason (instalador) e o nvim-lspconfig (configurador).
+    {
+        "mason-org/mason-lspconfig.nvim",
+        dependencies = { "mason-org/mason.nvim" },
+        config = function()
+            local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-					-- Handler específico para lua_ls
-					["lua_ls"] = function()
-						vim.lsp.config.lua_ls = {
-							capabilities = require("mason-lspconfig").get_capabilities(),
-							settings = {
-								Lua = {
-									runtime = {
-										version = "LuaJIT",
-									},
-									diagnostics = {
-										globals = { "vim" },
-									},
-									workspace = {
-										library = vim.api.nvim_get_runtime_file("", true),
-										checkThirdParty = false,
-									},
-									telemetry = {
-										enable = false,
-									},
-								},
-							},
-						}
-						vim.lsp.enable("lua_ls")
-					end,
+            require("mason-lspconfig").setup({
+                -- Lista de servidores LSP para garantir que estejam instalados.
+                ensure_installed = {
+                    "lua_ls",
+                    "pyright",
+                    "ts_ls",
+                    "html",
+                    "cssls",
+                    "jsonls",
+                    "yamlls",
+                    "bashls",
+                    "marksman",
+                    "jdtls",
+                },
+                -- Configuração dos handlers para cada servidor.
+                handlers = {
+                    function(server_name)
+                      vim.lsp.config(server_name, {
+                        capabilities = capabilities
+                      })
+                      vim.lsp.enable(server_name)
+                    end,
 
-					-- Handler específico para jdtls (Java)
-					["jdtls"] = function()
-						-- Para Java, é melhor usar nvim-jdtls plugin separadamente
-						vim.lsp.config.jdtls = {
-							capabilities = require("mason-lspconfig").get_capabilities(),
-							root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" },
-						}
-						vim.lsp.enable("jdtls")
-					end,
-				},
-			})
-		end,
-	},
+                    -- Configuração específica para o lua_ls.
+                    ["lua_ls"] = function()
+                        -- Usamos vim.lsp.config() para estender a configuração padrão.
+                        vim.lsp.config("lua_ls", {
+                            capabilities = capabilities,
+                            settings = {
+                                Lua = {
+                                    runtime = { version = "LuaJIT" },
+                                    diagnostics = { globals = { "vim" } },
+                                    workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+                                    telemetry = { enable = false },
+                                },
+                            },
+                        })
+                        vim.lsp.enable("lua_ls")
+                    end,
 
-	-- BLOCO 3: NVIM-LSPCONFIG
-	-- Para configurações adicionais e keymaps
-	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"mason-org/mason-lspconfig.nvim",
-		},
-		config = function()
-			-- Configuração de keymaps e autocommands
-			vim.api.nvim_create_autocmd("LspAttach", {
-				group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-				callback = function(event)
-					local client = vim.lsp.get_client_by_id(event.data.client_id)
-					local bufnr = event.buf
+                    -- jdtls também pode ter configurações específicas se necessário.
+                    ["jdtls"] = function()
+                        vim.lsp.config("jdtls", {
+                            capabilities = capabilities,
+                        })
+                        vim.lsp.enable("jdtls")
+                    end,
+                },
+            })
+        end,
+    },
 
-					-- Keymaps específicos para buffers com LSP
-					local opts = { buffer = bufnr, silent = true }
+    -- BLOCO 3: NVIM-LSPCONFIG
+    -- Este plugin agora serve principalmente para fornecer as configs padrão.
+    {
+        "neovim/nvim-lspconfig",
+        lazy = false,
+        dependencies = { "mason-org/mason-lspconfig.nvim" },
+        config = function()
+            -- Esta parte do seu código já estava excelente e segue as melhores práticas!
+            -- Define atalhos e configurações de UI quando um servidor LSP é anexado a um buffer.
 
-					-- Navegação
-					vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-					vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-					vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-					vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-					vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, opts)
+            -- Configurações globais de diagnóstico (sinais, texto virtual, etc.)
+            vim.diagnostic.config({
+                virtual_text = { prefix = "●", source = "if_many" },
+                float = { source = "always", border = "rounded" },
+                signs = true,
+                underline = true,
+                update_in_insert = false,
+                severity_sort = true,
+            })
 
-					-- Informações
-					vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-					vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-					vim.keymap.set("i", "<C-k>", vim.lsp.buf.signature_help, opts)
+            -- Atalhos para navegação de diagnósticos
+            vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
+            vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+            vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Set diagnostic loclist" })
 
-					-- Ações
-					vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
-					vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+            -- Gatilho para configurar atalhos específicos do LSP
+            vim.api.nvim_create_autocmd("LspAttach", {
+                group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+                callback = function(event)
+                    local bufnr = event.buf
+                    local opts = { buffer = bufnr, silent = true }
 
-					-- Highlight de referências
-					if client and client:supports_method("textDocument/documentHighlight") then
-						local highlight_group = vim.api.nvim_create_augroup("LspDocumentHighlight", { clear = false })
-						vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-							buffer = bufnr,
-							group = highlight_group,
-							callback = vim.lsp.buf.document_highlight,
-						})
-						vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-							buffer = bufnr,
-							group = highlight_group,
-							callback = vim.lsp.buf.clear_references,
-						})
-					end
-				end,
-			})
-
-			-- Configuração de diagnósticos
-			vim.diagnostic.config({
-				virtual_text = {
-					prefix = "●",
-					source = "if_many",
-				},
-				float = {
-					source = "always",
-					border = "rounded",
-				},
-				signs = true,
-				underline = true,
-				update_in_insert = false,
-				severity_sort = true,
-			})
-
-			-- Keymaps para diagnósticos
-			vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous diagnostic" })
-			vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
-			vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Set diagnostic loclist" })
-		end,
-	},
+                    -- Mapeamentos de teclas para ações do LSP
+                    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+                    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+                    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+                    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+                    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+                    vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+                    vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+                end,
+            })
+        end,
+    },
 }
