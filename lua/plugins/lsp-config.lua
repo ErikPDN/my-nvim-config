@@ -37,6 +37,7 @@ return {
                     "bashls",
                     "marksman",
                     "jdtls",
+                    "tailwindcss",
                 },
                 -- Configuração dos handlers para cada servidor.
                 handlers = {

@@ -3,9 +3,6 @@ return {
 		"hrsh7th/cmp-nvim-lsp",
 	},
 	{
-		"onsails/lspkind-nvim",
-	},
-	{
 		"L3MON4D3/LuaSnip",
 		dependencies = {
 			"saadparwaiz1/cmp_luasnip",
@@ -15,8 +12,8 @@ return {
 	{
 		"hrsh7th/nvim-cmp",
 		dependencies = {
-			"onsails/lspkind-nvim",
 			"luckasRanarison/tailwind-tools.nvim",
+			"onsails/lspkind-nvim",
 		},
 		config = function()
 			local cmp = require("cmp")
@@ -48,6 +45,8 @@ return {
 				formatting = {
 					format = lspkind.cmp_format({
 						before = require("tailwind-tools.cmp").lspkind_format,
+						maxwidth = 50,
+						ellipsis_char = "...",
 					}),
 				},
 			})

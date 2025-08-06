@@ -30,5 +30,9 @@ vim.o.showmode = false
 vim.o.showcmd = false
 vim.o.ruler = false
 
+-- Map Ctrl+S para salvar no modo normal e no modo inserção
+vim.keymap.set("n", "<C-s>", ":w<CR>", { desc = "Save file" })
+vim.keymap.set("i", "<C-s>", "<Esc>:w<CR>a", { desc = "Save file" })
+
 -- Carrega o lazy.nvim e os plugins
 require("config.lazy")
