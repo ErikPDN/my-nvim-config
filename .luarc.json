@@ -3,5 +3,9 @@
         "vim",
         "startify",
         "capabilities"
+    ],
+    "diagnostics.disable": [
+        "missing-parameter",
+        "redefined-local"
     ]
 }
