@@ -6,6 +6,7 @@
     ],
     "diagnostics.disable": [
         "missing-parameter",
-        "redefined-local"
+        "redefined-local",
+        "missing-fields"
     ]
 }
